@@ -1,0 +1,52 @@
+.new-task__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.new-task__control label,
+.invalid label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.new-task__control input,
+.invalid input {
+  font: inherit;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 20rem;
+  max-width: 100%;
+}
+
+.new-task__actions {
+  text-align: right;
+}
+
+.RangeRed {
+  accent-color: red;
+}
+.RangeGreen {
+  accent-color: green;
+}
+
+/*  */
+.invalid input {
+  border: 1px solid #b40e0e;
+  background-color: #fddddd;
+}
+
+.invalid input:focus {
+  border-color: #ff8800;
+  background-color: #f1bded;
+}
+
+.error-text {
+  color: #b40e0e;
+  font-size: small;
+  text-align: left;
+}
