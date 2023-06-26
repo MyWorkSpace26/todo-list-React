@@ -1,32 +1,18 @@
 import "./App.css";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import NewTasks from "./components/NewTasks/NewTasks";
 
 import Tasks from "./components/Tasks/Tasks";
+import useHttp from "./hooks/use-http";
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
   const [isTaskYear, getIsTaskYear] = useState("2023");
 
-  /* Fetching tasks */
-  const fetchTasksHandler = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
+  const { isLoading, error, sendRequest: fetchTasks } = useHttp();
 
-    try {
-      const response = await fetch(
-        "https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist.json"
-      );
-
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-
-      const data = await response.json();
-
+  useEffect(() => {
+    const transformTasks = (data) => {
       const loadedTasks = [];
 
       for (const key in data) {
@@ -40,31 +26,18 @@ const App = () => {
       }
 
       setTasks(loadedTasks);
-    } catch (error) {
-      setError(error.message);
-    }
-    setIsLoading(false);
-  }, []);
+    };
 
-  useEffect(() => {
-    fetchTasksHandler();
-  }, [fetchTasksHandler]);
-
-  /* Adding tasks */
-  const addTasksHandler = async (task) => {
-    const response = await fetch(
-      "https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist.json",
+    fetchTasks(
       {
-        method: "POST",
-        body: JSON.stringify(task),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+        url: "https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist.json",
+      },
+      transformTasks
     );
-    const data = await response.json();
+  }, [fetchTasks]);
 
-    console.log(data);
+  const addTasksHandler = async (task) => {
+    setTasks((prevTasks) => prevTasks.concat(task));
   };
 
   const deleteElementwithId = (idtodelete) => {
