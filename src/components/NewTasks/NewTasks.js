@@ -3,9 +3,9 @@ import Button from "../UI/Button";
 import NewTasksForm from "./NewTasksForm";
 import styles from "./NewTasks.module.css";
 
+import useHttp from "../../hooks/use-http";
+
 const NewTasks = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
   const StratEditingHandler = () => {
@@ -16,35 +16,30 @@ const NewTasks = (props) => {
     setIsEditing(false);
   };
 
-  const saveTaskDataHandler = async (enterredTaskData) => {
+  const { isLoading, error, sendRequest: sendTaskRequest } = useHttp();
+
+  const createTask = (enterredTaskData, data) => {
+    const generatedId = data.name;
     const TaskData = {
       ...enterredTaskData,
-      id: Math.floor(Math.random() * 100).toString(),
+      id: generatedId,
     };
+    setIsEditing(false);
+    props.onaddTasksHandler(TaskData);
+  };
 
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(
-        "https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist.json",
-        {
-          method: "POST",
-          body: JSON.stringify(TaskData),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Request failed!");
-      }
-      setIsEditing(false);
-      props.onaddTasksHandler(TaskData);
-    } catch (err) {
-      setError(err.message || "Something went wrong!");
-    }
-    setIsLoading(false);
+  const saveTaskDataHandler = async (enterredTaskData) => {
+    sendTaskRequest(
+      {
+        url: "https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist.json",
+        method: "POST",
+        body: enterredTaskData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      createTask.bind(null, enterredTaskData)
+    );
   };
 
   let content = isEditing ? (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "../UI/Card";
 import TasksList from "./TasksList";
 
@@ -17,8 +17,6 @@ const Tasks = (props) => {
     (elementArray) => elementArray.date.getFullYear().toString() === filterYear
   );
 
-  props.ontasknumbersinyear(filteredTasks.length);
-
   const getIdTask = (taskIdforDelete) => {
     props.ondeleteElementwithId(taskIdforDelete);
   };
@@ -26,6 +24,10 @@ const Tasks = (props) => {
   const saveChange = (datachangeforsave) => {
     props.onsaveChangeElementWithId(datachangeforsave);
   };
+
+  useEffect(() => {
+    props.ontasknumbersinyear(filteredTasks.length);
+  });
 
   return (
     <Card className={styles["tasks"]}>
