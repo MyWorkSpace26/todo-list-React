@@ -49,8 +49,8 @@ const App = () => {
   const saveChangeElementWithId = (arraytochange) => {
     setTasks((prevStat) => {
       return [
-        arraytochange,
         ...prevStat.filter((taskdelete) => taskdelete.id !== arraytochange.id),
+        arraytochange,
       ];
     });
   };

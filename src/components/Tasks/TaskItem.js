@@ -7,6 +7,8 @@ import Wrapper from "../../Helpers/Wrapper";
 import DeleteModal from "../UI/DeleteModal";
 import Modal from "../UI/Modal";
 
+import useHttp from "../../hooks/use-http";
+
 const TaskItem = (props) => {
   const [isEdit, setIsEdit] = useState(false);
   const StartEditHandler = () => {
@@ -21,9 +23,6 @@ const TaskItem = (props) => {
   };
 
   const [checkistrue, setCheckistrue] = useState(props.istrue);
-  const CheckistrueHandler = () => {
-    checkistrue ? setCheckistrue(false) : setCheckistrue(true);
-  };
 
   const [isDelete, setIsDelete] = useState(false);
   const StartDeleteHandler = () => {
@@ -32,14 +31,118 @@ const TaskItem = (props) => {
   const StopDeleteHandler = () => {
     setIsDelete(false);
   };
-  const DeleteHandler = () => {
+
+  const { isLoading, error, sendRequest: updateTaskRequest } = useHttp();
+
+  const updateTask = (dataChange) => {
+    const TaskData = {
+      ...dataChange,
+      id: dataChange.id,
+    };
+    props.ongetsaveChangeHandler(TaskData);
+  };
+
+  const saveChangeHandler = async (dataChange) => {
+    updateTaskRequest(
+      {
+        url: `https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist/${dataChange.id}.json`,
+        method: "PUT",
+        body: {
+          title: dataChange.title,
+          date: dataChange.date,
+          range: dataChange.range,
+          istrue: dataChange.istrue,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      updateTask.bind(null, dataChange)
+    );
+  };
+
+  const CheckistrueHandler = async () => {
+    checkistrue ? setCheckistrue(false) : setCheckistrue(true);
+    updateTaskRequest(
+      {
+        url: `https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist/${props.idtask}.json`,
+        method: "PUT",
+        body: {
+          title: props.title,
+          date: props.date,
+          range: props.range,
+          istrue: !checkistrue,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      updateTask.bind(null, {
+        id: props.idtask,
+        title: props.title,
+        date: props.date,
+        range: props.range,
+        istrue: !checkistrue,
+      })
+    );
+  };
+
+  const deleteTask = (data) => {
     setIsDelete(false);
     props.ongetIdTaskForDelete(props.idtask);
   };
 
-  const saveChangeHandler = (dataChange) => {
-    props.ongetsaveChangeHandler(dataChange);
+  const DeleteHandler = async () => {
+    updateTaskRequest(
+      {
+        url: `https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist/${props.idtask}.json`,
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      deleteTask
+    );
   };
+
+  let content = (
+    <Card
+      className={
+        !checkistrue
+          ? `${styles["task-item"]} ${styles["task-item-check"]}`
+          : `${styles["task-item"]}`
+      }
+    >
+      <TaskDate date={props.date} checkistrue={checkistrue} />
+      <div className={styles["task-item__description"]}>
+        <h2
+          onClick={CheckistrueHandler}
+          className={
+            !checkistrue
+              ? `${styles["task-item-without-check"]} ${styles["task-item-check-true"]}`
+              : styles["task-item-without-check"]
+          }
+        >
+          {props.title}
+        </h2>
+        <div className={styles["button-task-container"]}>
+          <button className={styles["edit"]} onClick={StartEditHandler}>
+            Edit
+          </button>
+          <button className={styles["delete"]} onClick={StartDeleteHandler}>
+            Delete
+          </button>
+        </div>
+      </div>
+    </Card>
+  );
+  if (error) {
+    content = <p>{error}</p>;
+  }
+
+  if (isLoading) {
+    content = <p>Loading...</p>;
+  }
   return (
     <Wrapper>
       {isEdit && (
@@ -61,37 +164,7 @@ const TaskItem = (props) => {
           titletask={props.title}
         />
       )}
-      <li>
-        <Card
-          className={
-            !checkistrue
-              ? `${styles["task-item"]} ${styles["task-item-check"]}`
-              : `${styles["task-item"]}`
-          }
-        >
-          <TaskDate date={props.date} checkistrue={checkistrue} />
-          <div className={styles["task-item__description"]}>
-            <h2
-              onClick={CheckistrueHandler}
-              className={
-                !checkistrue
-                  ? `${styles["task-item-without-check"]} ${styles["task-item-check-true"]}`
-                  : styles["task-item-without-check"]
-              }
-            >
-              {props.title}
-            </h2>
-            <div className={styles["button-task-container"]}>
-              <button className={styles["edit"]} onClick={StartEditHandler}>
-                Edit
-              </button>
-              <button className={styles["delete"]} onClick={StartDeleteHandler}>
-                Delete
-              </button>
-            </div>
-          </div>
-        </Card>
-      </li>
+      <li>{content}</li>
     </Wrapper>
   );
 };
