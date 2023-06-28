@@ -1,3 +1,28 @@
 .App {
   text-align: center;
 }
+
+.pagination {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  gap: 5px;
+  color: white;
+}
+
+.pagination .page-num {
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: 400;
+}
+
+.pagination .page-num:hover {
+  background-color: #ddb3f8;
+}
+
+.pagination .active {
+  background-color: #ddb3f8;
+}
