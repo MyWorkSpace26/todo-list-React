@@ -4,7 +4,9 @@ import styles from "./TasksList.module.css";
 import TasksPag from "../UI/TasksPag";
 const TasksList = (props) => {
   if (props.TasksArray.length === 0) {
-    return <h2 className={styles["tasks-list__fallback"]}>No Tasks Found</h2>;
+    return (
+      <h2 className={styles["tasks-list__fallback"]}>Задачи не найдены</h2>
+    );
   }
   const getIdTaskForDelete = (taskIdforDelete) => {
     props.ongetIdTask(taskIdforDelete);
