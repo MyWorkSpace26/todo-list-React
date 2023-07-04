@@ -9,6 +9,8 @@ import Modal from "../UI/Modal";
 
 import useHttp from "../../hooks/use-http";
 
+import { GiExtraTime } from "react-icons/gi";
+
 const TaskItem = (props) => {
   const [isEdit, setIsEdit] = useState(false);
   const StartEditHandler = () => {
@@ -126,6 +128,7 @@ const TaskItem = (props) => {
           {props.title}
         </h2>
         <div className={styles["button-task-container"]}>
+          {props.range > 50 ? <GiExtraTime className={styles["icons"]} /> : ""}
           <button className={styles["edit"]} onClick={StartEditHandler}>
             Edit
           </button>

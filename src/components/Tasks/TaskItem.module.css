@@ -99,3 +99,10 @@
   color: white;
   background-color: rgb(255, 175, 163);
 }
+
+.icons {
+  margin: -13px 12px;
+  color: red;
+  width: 50px;
+  height: 36px;
+}

@@ -16,6 +16,18 @@ const Tasks = (props) => {
   const filteredTasks = props.ArrayTasks.filter(
     (elementArray) => elementArray.date.getFullYear().toString() === filterYear
   );
+  const arrayTasksIsNotCompleted = [];
+  const filteredTasksIsCompleted = filteredTasks.filter((elementArray) => {
+    if (!elementArray.istrue) {
+      arrayTasksIsNotCompleted.push(elementArray);
+    }
+    return elementArray.istrue === true;
+  });
+
+  const filteredTasksCompleted =
+    arrayTasksIsNotCompleted.length !== 0
+      ? [...filteredTasksIsCompleted, ...arrayTasksIsNotCompleted]
+      : filteredTasks;
 
   const getIdTask = (taskIdforDelete) => {
     props.ondeleteElementwithId(taskIdforDelete);
@@ -32,9 +44,9 @@ const Tasks = (props) => {
   return (
     <Card className={styles["tasks"]}>
       <TaskFilter selected={filterYear} onfilterChange={filterChangeHandler} />
-      <TasksChart taskschart={filteredTasks} />
+      <TasksChart taskschart={filteredTasksCompleted} />
       <TasksList
-        TasksArray={filteredTasks}
+        TasksArray={filteredTasksCompleted}
         ongetIdTask={getIdTask}
         onsaveChange={saveChange}
       />
