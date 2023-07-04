@@ -45,6 +45,23 @@ const FormCreate = (props) => {
           <span>{props.onenterrdRange}</span>
         </div>
 
+        {/*  */}
+        <div className={props.ontemainputClasses}>
+          <label htmlFor="tema">Тема</label>
+          <input
+            type="text"
+            id="tema"
+            value={props.onenterrdTema}
+            placeholder={props.onenterrdTema}
+            onChange={props.ontemaChangeHandler}
+            onBlur={props.ontemaBlurHandler}
+          />
+          {props.ontemaInputHasError && (
+            <p className={styles["error-text"]}>Пожалуйста, введите тему.</p>
+          )}
+        </div>
+        {/*  */}
+
         <div className={props.ondateinputClasses}>
           <label htmlFor="date">Дата</label>
           <input

@@ -22,6 +22,15 @@ const NewTasksForm = (props) => {
   } = useInput(isNotEmpty && isNotshort);
 
   const {
+    value: enterrdTema,
+    isValid: enteredTemaIsValid,
+    hasError: temaInputHasError,
+    valueChangeHandler: temaChangeHandler,
+    inputBlurHandler: temaBlurHandler,
+    reset: resetTemaInput,
+  } = useInput(isNotEmpty && isNotshort);
+
+  const {
     value: enterrdDate,
     isValid: enterrdDateIsValid,
     hasError: dateInputHasError,
@@ -31,6 +40,10 @@ const NewTasksForm = (props) => {
   } = useInput(isNotEmpty);
 
   const titleinputClasses = titleInputHasError
+    ? styles["invalid"]
+    : styles["new-task__control"];
+
+  const temainputClasses = temaInputHasError
     ? styles["invalid"]
     : styles["new-task__control"];
 
@@ -53,10 +66,11 @@ const NewTasksForm = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    if (!enteredTitleIsValid) {
+    if (!enteredTitleIsValid || !enteredTemaIsValid) {
       setErrorMessage({
         title: "Неверный ввод",
-        message: "действительное название, состоящее из 4 символов или более",
+        message:
+          "действительное название или тему, состоящее из 4 символов или более",
       });
       return;
     }
@@ -69,14 +83,21 @@ const NewTasksForm = (props) => {
     }
     const taskData = {
       title: enterrdTitle,
+      tema: enterrdTema,
       range: +enterrdRange,
       date: new Date(enterrdDate),
       istrue: true,
     };
     props.onsaveTaskDataHandler(taskData);
 
+    const temaData = {
+      tema: enterrdTema,
+    };
+    props.onsaveTemaDataHandler(temaData);
+
     resetTitleInput();
     resetDateInput();
+    resetTemaInput();
     setEnterrdRange("");
     props.onCancle();
   };
@@ -100,6 +121,12 @@ const NewTasksForm = (props) => {
         /*  */
         onenterrdRange={enterrdRange}
         onrangeChangeHandler={rangeChangeHandler}
+        /*  */
+        ontemainputClasses={temainputClasses}
+        onenterrdTema={enterrdTema}
+        ontemaChangeHandler={temaChangeHandler}
+        ontemaBlurHandler={temaBlurHandler}
+        ontemaInputHasError={temaInputHasError}
         /*  */
         ondateinputClasses={dateinputClasses}
         onenterrdDate={enterrdDate}

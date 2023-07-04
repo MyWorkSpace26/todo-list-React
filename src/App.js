@@ -7,6 +7,7 @@ import useHttp from "./hooks/use-http";
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
+  const [tema, setTema] = useState([]);
   const [isTaskYear, getIsTaskYear] = useState("2023");
 
   const { isLoading, error, sendRequest: fetchTasks } = useHttp();
@@ -30,14 +31,38 @@ const App = () => {
 
     fetchTasks(
       {
-        url: "https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist.json",
+        url: "https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist1.json",
       },
       transformTasks
+    );
+
+    const transformTema = (data) => {
+      const loadedTema = [];
+
+      for (const key in data) {
+        loadedTema.push({
+          id: key,
+          tema: data[key].tema,
+        });
+      }
+
+      setTema(loadedTema);
+    };
+
+    fetchTasks(
+      {
+        url: "https://react-http-a5d84-default-rtdb.firebaseio.com/tematasks.json",
+      },
+      transformTema
     );
   }, [fetchTasks]);
 
   const addTasksHandler = async (task) => {
     setTasks((prevTasks) => prevTasks.concat(task));
+  };
+
+  const addTemaHandler = async (tema) => {
+    setTema((prevTasks) => prevTasks.concat(tema));
   };
 
   const deleteElementwithId = (idtodelete) => {
@@ -83,7 +108,11 @@ const App = () => {
   return (
     <>
       <h1 className="App"> Список задач : {isTaskYear}</h1>
-      <NewTasks onaddTasksHandler={addTasksHandler} />
+      <NewTasks
+        onaddTasksHandler={addTasksHandler}
+        onaddTemaHandler={addTemaHandler}
+        temadata={tema}
+      />
       {content}
     </>
   );

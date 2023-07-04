@@ -28,10 +28,20 @@ const NewTasks = (props) => {
     props.onaddTasksHandler(TaskData);
   };
 
+  const createTema = (enterredTaskData, data) => {
+    const generatedId = data.name;
+    const TemaData = {
+      ...enterredTaskData,
+      id: generatedId,
+    };
+    setIsEditing(false);
+    props.onaddTemaHandler(TemaData);
+  };
+
   const saveTaskDataHandler = async (enterredTaskData) => {
     sendTaskRequest(
       {
-        url: "https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist.json",
+        url: "https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist1.json",
         method: "POST",
         body: enterredTaskData,
         headers: {
@@ -42,10 +52,30 @@ const NewTasks = (props) => {
     );
   };
 
+  const saveTemaDataHandler = async (enterredTemaData) => {
+    for (const value in props.temadata) {
+      if (props.temadata[value].tema === enterredTemaData.tema) {
+        return;
+      }
+    }
+    sendTaskRequest(
+      {
+        url: "https://react-http-a5d84-default-rtdb.firebaseio.com/tematasks.json",
+        method: "POST",
+        body: enterredTemaData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      createTema.bind(null, enterredTemaData)
+    );
+  };
+
   let content = isEditing ? (
     <NewTasksForm
       onCancle={StopEditingHandler}
       onsaveTaskDataHandler={saveTaskDataHandler}
+      onsaveTemaDataHandler={saveTemaDataHandler}
     />
   ) : (
     <Button onClick={StratEditingHandler}>Добавить новую задачу</Button>
