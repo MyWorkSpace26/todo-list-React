@@ -36,6 +36,9 @@ const Tasks = (props) => {
   const saveChange = (datachangeforsave) => {
     props.onsaveChangeElementWithId(datachangeforsave);
   };
+  const savetemaChange = (datachangeforsave) => {
+    props.onsavetemaChangeElementWithId(datachangeforsave);
+  };
 
   useEffect(() => {
     props.ontasknumbersinyear(filteredTasks.length);
@@ -47,8 +50,10 @@ const Tasks = (props) => {
       <TasksChart taskschart={filteredTasksCompleted} />
       <TasksList
         TasksArray={filteredTasksCompleted}
+        temadata={props.temadata}
         ongetIdTask={getIdTask}
         onsaveChange={saveChange}
+        onsavetemaChange={savetemaChange}
       />
     </Card>
   );

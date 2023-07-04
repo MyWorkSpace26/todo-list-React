@@ -47,11 +47,12 @@ const TaskItem = (props) => {
   const saveChangeHandler = async (dataChange) => {
     updateTaskRequest(
       {
-        url: `https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist/${dataChange.id}.json`,
+        url: `https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist1/${dataChange.id}.json`,
         method: "PUT",
         body: {
           title: dataChange.title,
           date: dataChange.date,
+          tema: dataChange.tema,
           range: dataChange.range,
           istrue: dataChange.istrue,
         },
@@ -60,6 +61,41 @@ const TaskItem = (props) => {
         },
       },
       updateTask.bind(null, dataChange)
+    );
+  };
+
+  const updateTema = (dataChange) => {
+    const TaskData = {
+      ...dataChange,
+      id: dataChange.id,
+    };
+    props.ongetsavetemaChangeHandler(TaskData);
+  };
+
+  const saveTemaChangeHandler = async (dataChange) => {
+    let idtema = "";
+    for (const value in props.temadata) {
+      if (props.temadata[value].tema === dataChange.prevtema) {
+        idtema = props.temadata[value].id;
+      }
+    }
+
+    const dataChangeTema = {
+      id: idtema,
+      tema: dataChange.newtema,
+    };
+    updateTaskRequest(
+      {
+        url: `https://react-http-a5d84-default-rtdb.firebaseio.com/tematasks/${idtema}.json`,
+        method: "PUT",
+        body: {
+          tema: dataChangeTema.tema,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      updateTema.bind(null, dataChangeTema)
     );
   };
 
@@ -97,7 +133,7 @@ const TaskItem = (props) => {
   const DeleteHandler = async () => {
     updateTaskRequest(
       {
-        url: `https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist/${props.idtask}.json`,
+        url: `https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist1/${props.idtask}.json`,
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -152,12 +188,14 @@ const TaskItem = (props) => {
         <Modal
           idtask={props.idtask}
           titletask={props.title}
+          tematask={props.tema}
           datetask={props.date}
           rangetask={props.range}
           //
           onStopEditHandler={StopEditHandler}
           onEditHandler={EditHandler}
           onsaveChangeHandler={saveChangeHandler}
+          onsaveTemaChangeHandler={saveTemaChangeHandler}
         />
       )}
       {isDelete && (

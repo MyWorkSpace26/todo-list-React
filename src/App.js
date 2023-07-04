@@ -20,6 +20,7 @@ const App = () => {
         loadedTasks.push({
           id: key,
           title: data[key].title,
+          tema: data[key].tema,
           range: data[key].range,
           date: new Date(data[key].date),
           istrue: data[key].istrue,
@@ -78,21 +79,31 @@ const App = () => {
         arraytochange,
       ];
     });
+    console.log(arraytochange);
+  };
+  const savetemaChangeElementWithId = (arraytochange) => {
+    setTema((prevStat) => {
+      return [
+        ...prevStat.filter((temadelete) => temadelete.id !== arraytochange.id),
+        arraytochange,
+      ];
+    });
   };
 
   const tasknumbersinyear = (fullyear) => {
     getIsTaskYear(fullyear);
   };
-
   let content = <p>Found no Tasks.</p>;
 
   if (tasks.length > 0) {
     content = (
       <Tasks
         ArrayTasks={tasks}
+        temadata={tema}
         ontasknumbersinyear={tasknumbersinyear}
         ondeleteElementwithId={deleteElementwithId}
         onsaveChangeElementWithId={saveChangeElementWithId}
+        onsavetemaChangeElementWithId={savetemaChangeElementWithId}
       />
     );
   }

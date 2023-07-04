@@ -23,6 +23,10 @@ const TasksPag = (props) => {
   const getsaveChangeHandler = (dataChange) => {
     props.getsaveChangeHandler(dataChange);
   };
+
+  const getsavetemaChangeHandler = (dataChange) => {
+    props.getsavetemaChangeHandler(dataChange);
+  };
   return (
     <>
       <ol className={styles["list-tasks"]}>
@@ -31,11 +35,14 @@ const TasksPag = (props) => {
             key={task.id}
             idtask={task.id}
             title={task.title}
+            tema={task.tema}
             range={task.range}
             date={task.date}
             istrue={task.istrue}
             ongetIdTaskForDelete={getIdTaskForDelete}
             ongetsaveChangeHandler={getsaveChangeHandler}
+            temadata={props.temadata}
+            ongetsavetemaChangeHandler={getsavetemaChangeHandler}
           />
         ))}
       </ol>

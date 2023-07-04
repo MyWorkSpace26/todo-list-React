@@ -26,12 +26,16 @@ const Modal = (props) => {
   let previousDate = `${year}-${month}-${day}`;
 
   const [changedTitle, setChangedTitle] = useState(props.titletask);
+  const [changedTema, setChangedTema] = useState(props.tematask);
   const [changedRange, setChangedRange] = useState(props.rangetask);
   const [changedDate, setChangedDate] = useState(previousDate);
   const [errorMessage, setErrorMessage] = useState(""); //object
 
   const titleChangeHandler = (event) => {
     setChangedTitle(event.target.value);
+  };
+  const temaChangeHandler = (event) => {
+    setChangedTema(event.target.value);
   };
   const rangeChangeHandler = (event) => {
     setChangedRange(event.target.value);
@@ -65,10 +69,16 @@ const Modal = (props) => {
       id: props.idtask,
       title: changedTitle,
       range: +changedRange,
+      tema: changedTema,
       date: new Date(changedDate),
       istrue: true,
     };
     props.onsaveChangeHandler(taskData);
+    const temaData = {
+      prevtema: props.tematask,
+      newtema: changedTema,
+    };
+    props.onsaveTemaChangeHandler(temaData);
     props.onEditHandler();
   };
   return (
@@ -128,7 +138,18 @@ const Modal = (props) => {
                     />
                     <span>{changedRange}</span>
                   </div>
-
+                  {/*  */}
+                  <div className={styles["new-task__control"]}>
+                    <label>Тема</label>
+                    <input
+                      type="text"
+                      value={changedTema}
+                      placeholder={changedTema}
+                      onChange={temaChangeHandler}
+                    />
+                  </div>
+                  <br />
+                  {/*  */}
                   <div className={styles["new-task__control"]}>
                     <label>Дата</label>
                     <input
