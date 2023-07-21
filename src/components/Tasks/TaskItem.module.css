@@ -100,6 +100,22 @@
   background-color: rgb(255, 175, 163);
 }
 
+.fileopen {
+  width: 50px;
+  height: 50px;
+  color: rgb(176, 12, 201);
+  border-radius: 12px;
+}
+
+.fileopen:hover {
+  color: white;
+  background-color: rgb(227, 113, 243);
+}
+
+.fileopen:active {
+  background-color: rgb(227, 113, 243);
+}
+
 .icons {
   margin: -13px 12px;
   color: red;

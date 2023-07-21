@@ -24,9 +24,6 @@ const TasksPag = (props) => {
     props.getsaveChangeHandler(dataChange);
   };
 
-  const getsavetemaChangeHandler = (dataChange) => {
-    props.getsavetemaChangeHandler(dataChange);
-  };
   return (
     <>
       <ol className={styles["list-tasks"]}>
@@ -42,7 +39,6 @@ const TasksPag = (props) => {
             ongetIdTaskForDelete={getIdTaskForDelete}
             ongetsaveChangeHandler={getsaveChangeHandler}
             temadata={props.temadata}
-            ongetsavetemaChangeHandler={getsavetemaChangeHandler}
           />
         ))}
       </ol>

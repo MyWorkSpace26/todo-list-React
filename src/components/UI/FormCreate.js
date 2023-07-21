@@ -81,7 +81,7 @@ const FormCreate = (props) => {
       </div>
       <div className={styles["new-task__actions"]}>
         <Button type="button" onClick={props.onCancleForm}>
-          cancel
+          отменять
         </Button>
         <Button type="submit" /* ifdisabled={!formIsValid} */>
           Добавить задачу

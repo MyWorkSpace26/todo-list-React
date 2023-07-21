@@ -5,6 +5,7 @@ import TasksList from "./TasksList";
 import styles from "./Tasks.module.css";
 import TaskFilter from "./TaskFilter";
 import TasksChart from "./TasksChart";
+import { LuPanelLeftClose } from "react-icons/lu";
 
 const Tasks = (props) => {
   const [filterYear, setFilterYear] = useState("2023");
@@ -29,6 +30,21 @@ const Tasks = (props) => {
       ? [...filteredTasksIsCompleted, ...arrayTasksIsNotCompleted]
       : filteredTasks;
 
+  const arrayTasksNotImportant = [];
+  const filteredTasksIsImportnant = filteredTasksCompleted.filter(
+    (elementArray) => {
+      if (elementArray.range < 60) {
+        arrayTasksNotImportant.push(elementArray);
+      }
+      return elementArray.range > 50;
+    }
+  );
+
+  const arrayTasksIsImportant =
+    arrayTasksNotImportant.length !== 0
+      ? [...filteredTasksIsImportnant, ...arrayTasksNotImportant]
+      : filteredTasksCompleted;
+
   const getIdTask = (taskIdforDelete) => {
     props.ondeleteElementwithId(taskIdforDelete);
   };
@@ -36,24 +52,27 @@ const Tasks = (props) => {
   const saveChange = (datachangeforsave) => {
     props.onsaveChangeElementWithId(datachangeforsave);
   };
-  const savetemaChange = (datachangeforsave) => {
-    props.onsavetemaChangeElementWithId(datachangeforsave);
-  };
 
   useEffect(() => {
     props.ontasknumbersinyear(filteredTasks.length);
   });
-
+  const onStopopenHandler = () => {
+    props.onStopopenHandler();
+  };
   return (
     <Card className={styles["tasks"]}>
+      <p className="App-p">Список задач этой темы: {props.ArrayTasks.length}</p>
+      <LuPanelLeftClose
+        onClick={onStopopenHandler}
+        className={styles["icons"]}
+      />
       <TaskFilter selected={filterYear} onfilterChange={filterChangeHandler} />
-      <TasksChart taskschart={filteredTasksCompleted} />
+      <TasksChart taskschart={arrayTasksIsImportant} />
       <TasksList
-        TasksArray={filteredTasksCompleted}
+        TasksArray={arrayTasksIsImportant}
         temadata={props.temadata}
         ongetIdTask={getIdTask}
         onsaveChange={saveChange}
-        onsavetemaChange={savetemaChange}
       />
     </Card>
   );

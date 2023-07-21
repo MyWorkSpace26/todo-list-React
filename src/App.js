@@ -2,9 +2,9 @@ import "./App.css";
 import React, { useState, useEffect } from "react";
 import NewTasks from "./components/NewTasks/NewTasks";
 
-import Tasks from "./components/Tasks/Tasks";
+//import Tasks from "./components/Tasks/Tasks";
 import useHttp from "./hooks/use-http";
-
+import Topics from "./components/Topics/Topics";
 const App = () => {
   const [tasks, setTasks] = useState([]);
   const [tema, setTema] = useState([]);
@@ -67,6 +67,52 @@ const App = () => {
   };
 
   const deleteElementwithId = (idtodelete) => {
+    let temaTask = "";
+    for (let value in tasks) {
+      if (tasks[value].id === idtodelete) {
+        temaTask = tasks[value].tema;
+      }
+    }
+    const temaArrayForDelete = [];
+
+    for (const value in tasks) {
+      if (tasks[value].tema === temaTask) {
+        temaArrayForDelete.push(tema[value]);
+      }
+    }
+    console.log("length is : ", temaArrayForDelete.length);
+    let idtemafordelete = "";
+    for (const value in tema) {
+      if (tema[value].tema === temaTask) {
+        idtemafordelete = tema[value].id;
+      }
+    }
+
+    const deleteTask = (data) => {
+      setTema((prevStat) => {
+        return [
+          ...prevStat.filter((temadelete) => temadelete.id !== idtemafordelete),
+        ];
+      });
+    };
+
+    const DeleteHandler = async () => {
+      fetchTasks(
+        {
+          url: `https://react-http-a5d84-default-rtdb.firebaseio.com/tematasks/${idtemafordelete}.json`,
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+        deleteTask
+      );
+    };
+
+    if (temaArrayForDelete.length === 1) {
+      DeleteHandler();
+    }
+
     setTasks((prevStat) => {
       return [...prevStat.filter((taskdelete) => taskdelete.id !== idtodelete)];
     });
@@ -79,15 +125,6 @@ const App = () => {
         arraytochange,
       ];
     });
-    console.log(arraytochange);
-  };
-  const savetemaChangeElementWithId = (arraytochange) => {
-    setTema((prevStat) => {
-      return [
-        ...prevStat.filter((temadelete) => temadelete.id !== arraytochange.id),
-        arraytochange,
-      ];
-    });
   };
 
   const tasknumbersinyear = (fullyear) => {
@@ -97,13 +134,12 @@ const App = () => {
 
   if (tasks.length > 0) {
     content = (
-      <Tasks
-        ArrayTasks={tasks}
+      <Topics
         temadata={tema}
+        ArrayTasks={tasks}
         ontasknumbersinyear={tasknumbersinyear}
         ondeleteElementwithId={deleteElementwithId}
         onsaveChangeElementWithId={saveChangeElementWithId}
-        onsavetemaChangeElementWithId={savetemaChangeElementWithId}
       />
     );
   }
@@ -118,7 +154,7 @@ const App = () => {
 
   return (
     <>
-      <h1 className="App"> Список задач : {isTaskYear}</h1>
+      <h1 className="App"> Список задач : {tasks.length}</h1>
       <NewTasks
         onaddTasksHandler={addTasksHandler}
         onaddTemaHandler={addTemaHandler}

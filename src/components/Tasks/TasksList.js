@@ -15,16 +15,13 @@ const TasksList = (props) => {
   const getsaveChangeHandler = (dataChange) => {
     props.onsaveChange(dataChange);
   };
-  const getsavetemaChangeHandler = (dataChange) => {
-    props.onsavetemaChange(dataChange);
-  };
+
   return (
     <TasksPag
       taskArray={props.TasksArray}
       temadata={props.temadata}
       getIdTaskForDelete={getIdTaskForDelete}
       getsaveChangeHandler={getsaveChangeHandler}
-      getsavetemaChangeHandler={getsavetemaChangeHandler}
     />
   );
 };

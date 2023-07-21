@@ -30,9 +30,6 @@ const TaskItem = (props) => {
   const StartDeleteHandler = () => {
     setIsDelete(true);
   };
-  const StopDeleteHandler = () => {
-    setIsDelete(false);
-  };
 
   const { isLoading, error, sendRequest: updateTaskRequest } = useHttp();
 
@@ -64,50 +61,16 @@ const TaskItem = (props) => {
     );
   };
 
-  const updateTema = (dataChange) => {
-    const TaskData = {
-      ...dataChange,
-      id: dataChange.id,
-    };
-    props.ongetsavetemaChangeHandler(TaskData);
-  };
-
-  const saveTemaChangeHandler = async (dataChange) => {
-    let idtema = "";
-    for (const value in props.temadata) {
-      if (props.temadata[value].tema === dataChange.prevtema) {
-        idtema = props.temadata[value].id;
-      }
-    }
-
-    const dataChangeTema = {
-      id: idtema,
-      tema: dataChange.newtema,
-    };
-    updateTaskRequest(
-      {
-        url: `https://react-http-a5d84-default-rtdb.firebaseio.com/tematasks/${idtema}.json`,
-        method: "PUT",
-        body: {
-          tema: dataChangeTema.tema,
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-      updateTema.bind(null, dataChangeTema)
-    );
-  };
-
   const CheckistrueHandler = async () => {
     checkistrue ? setCheckistrue(false) : setCheckistrue(true);
     updateTaskRequest(
       {
-        url: `https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist/${props.idtask}.json`,
+        url: `https://react-http-a5d84-default-rtdb.firebaseio.com/taskslist1/${props.idtask}.json`,
         method: "PUT",
         body: {
           title: props.title,
           date: props.date,
+          tema: props.tema,
           range: props.range,
           istrue: !checkistrue,
         },
@@ -118,6 +81,7 @@ const TaskItem = (props) => {
       updateTask.bind(null, {
         id: props.idtask,
         title: props.title,
+        tema: props.tema,
         date: props.date,
         range: props.range,
         istrue: !checkistrue,
@@ -128,6 +92,9 @@ const TaskItem = (props) => {
   const deleteTask = (data) => {
     setIsDelete(false);
     props.ongetIdTaskForDelete(props.idtask);
+  };
+  const StopDeleteHandler = () => {
+    setIsDelete(false);
   };
 
   const DeleteHandler = async () => {
@@ -195,7 +162,6 @@ const TaskItem = (props) => {
           onStopEditHandler={StopEditHandler}
           onEditHandler={EditHandler}
           onsaveChangeHandler={saveChangeHandler}
-          onsaveTemaChangeHandler={saveTemaChangeHandler}
         />
       )}
       {isDelete && (

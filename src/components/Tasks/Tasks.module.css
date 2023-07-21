@@ -14,3 +14,19 @@ p {
   font-weight: bold;
   font-size: larger;
 }
+
+.icons {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  color: white;
+}
+
+.icons:hover {
+  background-color: rgb(240, 151, 74);
+}
+
+.icons:active {
+  color: rgb(240, 151, 74);
+  background-color: white;
+}

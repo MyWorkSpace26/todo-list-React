@@ -1,7 +1,9 @@
 .App {
   text-align: center;
 }
-
+.App-p {
+  margin: 0;
+}
 .pagination {
   list-style: none;
   display: flex;
