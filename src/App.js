@@ -129,6 +129,7 @@ const App = () => {
 
   const tasknumbersinyear = (fullyear) => {
     getIsTaskYear(fullyear);
+    console.log("Выбранный год:", isTaskYear);
   };
   let content = <p>Found no Tasks.</p>;
 
